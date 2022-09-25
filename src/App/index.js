@@ -8,21 +8,39 @@ import { AppUI } from "./AppUI";
 //   { text: "LALALALAA", completed: false },
 // ];
 
-function App() {
+// Recibimos como parámetros el nombre y el estado inicial de nuestro item.
+function useLocalStorage(itemName, initialValue) {
   //obteniendo totos de localStorage
-  const localStorageTodos = localStorage.getItem("TODOS_V1");
-  let parsedTodos;
+  const localStorageTodos = localStorage.getItem(itemName);
+  let parsedItem;
 
   if (!localStorageTodos) {
     //iniiciando nuestro localStorage con un array basio
-    localStorage.setItem("TODOS_V1", JSON.stringify([]));
-    parsedTodos = [];
+    localStorage.setItem(itemName, JSON.stringify(initialValue));
+    parsedItem = initialValue;
   } else {
     //parseando a un objeto JSON lo almacenado en localStorage
-    parsedTodos = JSON.parse(localStorageTodos);
+    parsedItem = JSON.parse(localStorageTodos);
   }
 
-  const [todos, setTodos] = React.useState(parsedTodos);
+  // ¡Podemos utilizar otros hooks!
+  const [item, setItem] = React.useState(parsedItem);
+
+  // Actualizamos la función para guardar nuestro item con las nuevas variables y parámetros
+  const saveItem = (newItem) => {
+    const stringifiedTodos = JSON.stringify(newItem);
+    localStorage.setItem(itemName, stringifiedTodos);
+    setItem(newItem);
+  };
+
+  // Regresamos los datos que necesitamos
+  return [item, saveItem];
+}
+
+function App() {
+  // Desestructuramos los datos que retornamos de nuestro custom hook, y le pasamos los argumentos que necesitamos (nombre y estado inicial)
+  const [todos, saveTodos] = useLocalStorage("TODOS_V1", []);
+
   const [searchValue, setSearchValue] = React.useState("");
 
   const completedTodos = todos.filter((todo) => !!todo.completed).length;
@@ -41,24 +59,18 @@ function App() {
     });
   }
 
-  const saveTodosLocalStorage = (newTodos) => {
-    const stringifiedTodos = JSON.stringify(newTodos);
-    localStorage.setItem("TODOS_V1", stringifiedTodos);
-    setTodos(newTodos);
-  };
-
   const completeTodo = (text) => {
     const todoIndex = todos.findIndex((todo) => todo.text === text);
     const newTodos = [...todos];
     newTodos[todoIndex].completed = true;
-    saveTodosLocalStorage(newTodos);
+    saveTodos(newTodos);
   };
 
   const deleteTodo = (text) => {
     const todoIndex = todos.findIndex((todo) => todo.text === text);
     const newTodos = [...todos];
     newTodos.splice(todoIndex, 1);
-    saveTodosLocalStorage(newTodos);
+    saveTodos(newTodos);
   };
 
   return (
