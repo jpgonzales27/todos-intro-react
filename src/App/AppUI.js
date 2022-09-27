@@ -7,42 +7,32 @@ import { TodoList } from "../TodoList";
 import { TodoItem } from "../TodoItem";
 import { CreateTodoButton } from "../CreateTodoButton";
 
-function AppUI({
-  loading,
-  error,
-  totalTodos,
-  completedTodos,
-  searchValue,
-  setSearchValue,
-  searchedTodos,
-  completeTodo,
-  deleteTodo,
-}) {
+function AppUI() {
+  //Destructuramos los valores de nuestro conexto lo q esta guardado en el objeto value
+  const { error, loading, searchedTodos, completeTodo, deleteTodo } =
+    React.useContext(TodoContext);
+
   return (
     <React.Fragment>
       <TodoCounter />
       <TodoSearch />
 
-      {/* Podemos acceder a nuestro contexto con el consumer */}
-      <TodoContext.Consumer>
-        {({ error, loading, searchedTodos, completeTodo, deleteTodo }) => (
-          <TodoList>
-            {error && <p>Desespérate, hubo un error...</p>}
-            {loading && <p>Estamos cargando, no desesperes...</p>}
-            {!loading && !searchedTodos.length && <p>¡Crea tu primer TODO!</p>}
+      <TodoList>
+        {error && <p>Desespérate, hubo un error...</p>}
+        {loading && <p>Estamos cargando, no desesperes...</p>}
+        {!loading && !searchedTodos.length && <p>¡Crea tu primer TODO!</p>}
 
-            {searchedTodos.map((todo) => (
-              <TodoItem
-                key={todo.text}
-                text={todo.text}
-                completed={todo.completed}
-                onComplete={() => completeTodo(todo.text)}
-                onDelete={() => deleteTodo(todo.text)}
-              />
-            ))}
-          </TodoList>
-        )}
-      </TodoContext.Consumer>
+        {searchedTodos.map((todo) => (
+          <TodoItem
+            key={todo.text}
+            text={todo.text}
+            completed={todo.completed}
+            onComplete={() => completeTodo(todo.text)}
+            onDelete={() => deleteTodo(todo.text)}
+          />
+        ))}
+      </TodoList>
+
       <CreateTodoButton />
     </React.Fragment>
   );
