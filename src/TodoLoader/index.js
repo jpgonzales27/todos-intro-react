@@ -9,7 +9,9 @@ function TodosLoading() {
     //   <span className="LoadingTodo-deleteIcon"></span>
     // </div>
 
-    <div id="preloader5"></div>
+    <div className="contenedor">
+      <div id="preloader5"></div>
+    </div>
   );
 }
 

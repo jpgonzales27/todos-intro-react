@@ -58,6 +58,13 @@
 }
 
 /*OTRO LOADING*/
+.contenedor {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #preloader5 {
   position: relative;
   width: 30px;
