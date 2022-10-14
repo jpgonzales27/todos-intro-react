@@ -5,12 +5,6 @@ import { FaTrashAlt, FaCheckCircle } from "react-icons/fa";
 function TodoItem(props) {
   return (
     <li className="TodoItem">
-      <span
-        className={`Icon Icon-check ${props.completed && "Icon-check--active"}`}
-        onClick={props.onComplete}
-      >
-        √
-      </span>
       <FaCheckCircle
         className={`Icon Icon-check ${props.completed && "Icon-check--active"}`}
         onClick={props.onComplete}
